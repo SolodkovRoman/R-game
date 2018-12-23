@@ -14,13 +14,14 @@ int main()
     for (int i = 0; i<q; i++) {
         p[i] = *new string [q];
     }
-    cout << "-----------" << endl;
+    int score = 0;
+newpole:
+    int hmany = 0;
     for (int y = 0; y<q; y++) {
         for (int x = 0; x<q; x++) {
             p[y][x] = ' ';
         }
     }
-newpole:
     int x = rand() % q;
     int y = rand() % q;
     p[y][x] = 'P';
@@ -61,20 +62,44 @@ newpole:
     p[y6][x6] = 'W';
     int m;
     int n;
-
+    char cont = ' ';
+    system("cls");
+    cout << "-----------" << endl;
+    for (int y1 = 0; y1<q; y1++) {
+        for (int x1 = 0; x1<q; x1++) {
+            cout << '|' << p[y1][x1];
+        }
+        cout << '|' << endl << "-----------" << endl;
+    }
     while (true) {
+        m = y;
+        n = x;
         system("cls");
+        cout << "-----------" << endl;
         for (int y1 = 0; y1<q; y1++) {
             for (int x1 = 0; x1<q; x1++) {
                 cout << '|' << p[y1][x1];
             }
             cout << '|' << endl << "-----------" << endl;
         }
-        cout << endl << "Enter w(up), s(down), a(left) or d(right)" << endl;
-        char cont;
-        m = y;
-        n = x;
-        cin >> cont;
+        int press = ' ';
+        cout << "Enter '1'(for next step) or '2'(for new area)" << endl;
+        cin >> press;
+        switch (press)
+        {
+        case 1:
+            cout << endl << "Enter w(up), s(down), a(left) or d(right)" << endl << "P.S.: Only this controls" << endl;
+            cin >> cont;
+            hmany++;
+            break;
+        case 2:
+            score--;
+            goto newpole;
+        default:
+            cout << "U can enter only '1' or '2'!" << endl;
+            score--;
+        }
+        Sleep(100);
         switch (cont)
         {
         case 'w':
@@ -97,16 +122,44 @@ newpole:
                 x++;
             }
             break;
+        default:
+            cout << "U can enter only 'w', 's', 'a' or 'd'!" << endl;
+            score--;
+        }
+        if (p[y][x] == 'X'){
+                break;
+        }
+        if (p[y][x] == 'W'){
+                score = score + 3;
+                if (hmany < 5)
+                    score = score + 3;
+                else if (hmany < 7)
+                    score = score + 3;
+                else if (hmany < 10)
+                    score = score + 1;
+                goto newpole;
         }
         p[m][n] = ' ';
-        if (p[y][x] == 'W') {
-            goto newpole;
-        }
-        else {
-            break;
+        p[y][x] = 'P';
+    }
+/*
+    int hm = 0;
+    for (int g = 0; g<q; g++) {
+        for (int h = 0; h<q; h++) {
+            if (p[q][h] == 'W') {
+                    break;
+            }
+            else if (p[q][h] != 'W') {
+                hm++;
+            }
         }
     }
+    if (hm == 25) {
+        goto newpole;
+    }
+*/
     system("cls");
-    cout << "Game over!";
+    cout << "Game over! ";
+    cout << "Your score is: " << score;
     return 0;
 }
